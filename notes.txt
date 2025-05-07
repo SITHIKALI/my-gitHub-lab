@@ -9,3 +9,25 @@ This repo auto-configures Git in GitHub Codespaces using a `.devcontainer` folde
 - `rerere.enabled` unset
 
 Customize `.devcontainer/git-preconfig.sh` for your needs.
+
+Creating A New Repo
+
+cd /path/to/new
+mkdir my-first-git-repo
+cd my-first-git-repo
+
+git init
+
+The Files Are IN the Git Repo
+Every git repo comes with a directory that contains all of the state of the git repo. This repo is found in .git
+
+➜  my-first-git git:(master) find .git
+
+The Basics
+
+The next couple commands will be 80% of the commands you will execute when using git. 80% of git is exceptionally easy. Its the 20% that can get you into trouble :7
+
+
+    git add <path-to-file | pattern> will add zero or more files to the index (staging area)
+    git commit -m '<message>' will commit what changes are present in the index.
+    git status will describe the state of your git repo which will include tracked, staged, and untracked changes.
