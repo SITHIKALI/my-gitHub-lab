@@ -1,0 +1,11 @@
+# GitHub Codespaces Git Config Starter
+
+This repo auto-configures Git in GitHub Codespaces using a `.devcontainer` folder.
+
+## Pre-Configured Settings:
+- `user.name = SITHIKALI`
+- `user.email = sithikali2000@.com`
+- `init.defaultBranch` unset
+- `rerere.enabled` unset
+
+Customize `.devcontainer/git-preconfig.sh` for your needs.
