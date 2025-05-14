@@ -265,3 +265,172 @@ Example output:
    ```
 
 ---
+
+### A Bit Of Plumbing
+
+#### Git Internal Representations
+
+To understand Git, you must go past the porcelain and check out the plumbing.
+
+---
+
+#### SHAs (Secure Hash Algorithm)
+
+- Every Git commit comes with a SHA (a hash with 0-9a-f characters).
+- You can use the first 7 characters of a SHA for Git to identify what you are referring to.
+
+**Command to Get the SHA of a Commit**  
+```bash
+git log
+```
+
+**Example Output**:  
+```plaintext
+commit 5ba786fcc93e8092831c01e71444b9baa2228a4f (HEAD -> master)
+Author: YourName <your.email@example.com>
+Date:   Mon May 14 03:44:45 2025 -0700
+
+    Initial commit
+```
+
+The long string after `commit` is the SHA.
+
+---
+
+#### Commit File Data Inside `.git` Folder
+
+Git stores all state in files under the `.git` directory.
+
+**Steps to Locate a Commit's Data**:
+1. Find the first 2 characters of your commit SHA.
+2. Navigate to the `.git/objects` directory and look for a folder matching the first 2 characters.
+3. Inside that folder, you’ll find a file with the remaining 38 characters of the SHA.
+
+**Commands**:
+```bash
+ls -la .git/objects
+ls -la .git/objects/<first-two-characters>
+cat .git/objects/<first-two-characters>/<remaining-38-characters>
+```
+
+**Example Output**:
+```bash
+➜ ls -la .git/objects
+drwxrwxr-x 2 YourName YourName 4096 May 14 03:44 .
+drwxrwxr-x 3 YourName YourName 4096 May 14 03:44 ..
+drwxrwxr-x 2 YourName YourName 4096 May 14 03:44 5b
+
+➜ ls -la .git/objects/5b
+-r--r--r-- 1 YourName YourName  125 May 14 03:44 a786fcc93e8092831c01e71444b9baa2228a4f
+```
+
+---
+
+#### Inspecting Files in Git Data Store
+
+Use `git cat-file` to inspect Git data objects such as commits, trees, or blobs.
+
+**Command**:  
+```bash
+git cat-file -p <sha>
+```
+
+---
+
+#### Hashing a File with `git hash-object`
+
+The `git hash-object` command is used to compute the SHA-1 hash of a file. This is how Git uniquely identifies files in its object database.
+
+**Command**:  
+```bash
+git hash-object first.txt
+```
+Here’s how the updated section will look in proper README format:
+
+---
+
+#### Storing and Inspecting Files in Git Database
+
+If a file is not yet in Git's database, you can manually add it using the following commands:
+
+1. **Store File in Git Database**:  
+   Use the `git hash-object -w <filename>` command to store the file in Git's database.
+
+   **Command**:  
+   ```bash
+   git hash-object -w first.txt
+   ```
+   **Example Output**:  
+   ```plaintext
+   db7e56d87ff1f8c4bc6ee81a8e3f7417781ea560
+   ```
+
+2. **Inspect the File Content**:  
+   Use the `git cat-file -p <sha>` command to view the content of the file stored in the database.
+
+   **Command**:  
+   ```bash
+   git cat-file -p db7e56d87ff1f8c4bc6ee81a8e3f7417781ea560
+   ```
+   **Example Output**:  
+   ```plaintext
+   shows file content
+   ```
+
+---
+
+**Explanation**:  
+This command calculates the SHA-1 hash of the file `first.txt` and outputs the hash. Git uses this hash to track the file in its object database.
+
+---
+
+#### Example Exercise
+
+1. Inspect a Commit SHA:  
+   ```bash
+   git cat-file -p <commit-sha>
+   ```
+
+   **Example Output**:
+   ```plaintext
+   tree 4e507fdc6d9044ccd8a4a3061324c9f711c4667d
+   author YourName <your.email@example.com> 1705891256 -0700
+   committer YourName <your.email@example.com> 1705891256 -0700
+
+   Initial commit
+   ```
+
+2. Inspect a Tree SHA (Directory):  
+   ```bash
+   git cat-file -p <tree-sha>
+   ```
+
+   **Example Output**:  
+   ```plaintext
+   100644 blob 9a71f81a4b4754b686fd37cbb3c72d0250d344aa    first.md
+   ```
+
+3. Inspect a Blob SHA (File):  
+   ```bash
+   git cat-file -p <blob-sha>
+   ```
+
+   **Example Output**:
+   ```plaintext
+   hello world
+   ```
+
+---
+
+#### Key Concepts
+
+- **Tree**: Represents a directory.
+- **Blob**: Represents a file.
+
+---
+
+#### Big Takeaway
+
+- Git does **not** store diffs. It stores the complete version of the entire source at the point of each commit.
+- Each commit contains pointers to the entire worktree, making it efficient in tracking changes without duplicating the entire source code.
+
