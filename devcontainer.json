@@ -1,6 +1,0 @@
-{
-    "name": "Auto Git Config Dev Container",
-    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-    "postCreateCommand": "./.devcontainer/git-preconfig.sh"
-  }
-  

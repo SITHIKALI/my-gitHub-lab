@@ -1,0 +1,4 @@
+in the name of allah o "Welcome to your terminal session!"
+:wq
+
+
